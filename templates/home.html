@@ -4,10 +4,13 @@
 {% endblock %}
 {% block content %}
     <h1>Welcome to my blog</h1>
+    <a href="{% url 'post_create' %}">Create Post</a>
     <ul>
         {% for post in object_list %}
             <li>
-                <a href="">{{ post.title }}</a>
+                <a href="{% url 'post_detail' post.id %}">
+                    {{ post.title }}
+                </a>
                 <p>{{ post.content }}</p>
                 <p>{{ post.category }}</p>
                 <p>{{ post.created_at }}</p>
