@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from blog.models import Post
 
@@ -26,3 +27,10 @@ class PostUpdateView(UpdateView):
 
     def get_success_url(self):
         return f'/post_detail/{self.object.id}/'
+
+class PostDeleteView(DeleteView):
+    model = Post
+    template_name = 'post_delete.html'
+
+    def get_success_url(self):
+        return reverse_lazy('home')

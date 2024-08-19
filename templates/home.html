@@ -17,6 +17,10 @@
                    href="{% url 'post_update' post.id %}">
                     Update
                 </a>
+            <a href="{% url 'post_delete' post.id %}" 
+               class="btn btn-danger">
+                Delete
+            </a>
             </li>
         {% endfor %}
     </ul>
