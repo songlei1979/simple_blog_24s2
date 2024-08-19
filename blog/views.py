@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from blog.models import Post
 
@@ -18,3 +18,11 @@ class PostCreateView(CreateView):
     model = Post
     fields = ['title', 'content', 'category']
     template_name = 'post_create.html'
+
+class PostUpdateView(UpdateView):
+    model = Post
+    fields = ['title', 'content', 'category']
+    template_name = 'post_update.html'
+
+    def get_success_url(self):
+        return f'/post_detail/{self.object.id}/'
