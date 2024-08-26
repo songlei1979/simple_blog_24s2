@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}
+    Create Post
+{% endblock %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <h1>Create Post</h1>
+        <form method="post">
+            {% csrf_token %}
+            <p>Title: <input name="title" type="text" class="form-control"/> </p>
+            <p>Content: <textarea name="content" class="form-control"></textarea></p>
+            <p>Category: <select name="category_id"  class="form-control">
+                {% for category in categories %}
+                    <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endfor %}
+            </select>
+        </p>
+            <p><input name="author_id" type="hidden" value="{{ user.id }}" ></p>
+            <button type="submit" class="btn btn-primary">
+                Create
+            </button>
+        </form>
+
+    {% else %}
+        Login to create post
+    {% endif %}
+{% endblock %}

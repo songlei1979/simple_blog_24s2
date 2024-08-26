@@ -4,7 +4,9 @@
 {% endblock %}
 {% block content %}
     <h1>Welcome to my blog</h1>
-    <a href="{% url 'post_create' %}">Create Post</a>
+    {% if user.is_authenticated %}
+        <a href="{% url 'post_create_function' %}">Create Post</a>
+    {% endif %}
     <ul>
         {% for post in object_list %}
             <li>
@@ -13,14 +15,18 @@
                 </a>
                 <p>{{ post.content }}</p>
                 <p>{{ post.category }}</p>
-                <a class="btn btn-success" 
-                   href="{% url 'post_update' post.id %}">
-                    Update
-                </a>
-            <a href="{% url 'post_delete' post.id %}" 
-               class="btn btn-danger">
-                Delete
-            </a>
+                {% if user.is_authenticated %}
+                    {% if user == post.author %}
+                        <a class="btn btn-success"
+                           href="{% url 'post_update' post.id %}">
+                            Update
+                        </a>
+                        <a href="{% url 'post_delete' post.id %}"
+                           class="btn btn-danger">
+                            Delete
+                        </a>
+                    {% endif %}
+                {% endif %}
             </li>
         {% endfor %}
     </ul>

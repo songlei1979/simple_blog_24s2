@@ -1,4 +1,15 @@
 {% extends 'base.html' %}
+<script>
+    var dl = document.getElementById('author');
+    var el = 0;
+    for (var i = 0; i < dl.options.length; i++) {
+        if (dl.options[i].value == {{user.id}}) {
+            el = i;
+            break;
+        }
+    }
+    dl.selectedIndex = el;
+</script>
 {% block title %}
     Post Create
 {% endblock %}
@@ -12,3 +23,4 @@
         </button>
     </form>
 {% endblock %}
+

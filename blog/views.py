@@ -1,8 +1,10 @@
+from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from blog.models import Post
+from blog.forms import CreateForm
+from blog.models import Post, Category
 
 
 # Create your views here.
@@ -11,22 +13,26 @@ class HomeView(ListView):
     template_name = 'home.html'
     ordering = ['-created_at']
 
+
 class PostDetailView(DetailView):
     model = Post
     template_name = 'post_detail.html'
 
+
 class PostCreateView(CreateView):
     model = Post
-    fields = ['title', 'content', 'category']
+    form_class = CreateForm
     template_name = 'post_create.html'
+
 
 class PostUpdateView(UpdateView):
     model = Post
-    fields = ['title', 'content', 'category']
+    form_class = CreateForm
     template_name = 'post_update.html'
 
     def get_success_url(self):
         return f'/post_detail/{self.object.id}/'
+
 
 class PostDeleteView(DeleteView):
     model = Post
@@ -34,3 +40,19 @@ class PostDeleteView(DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('home')
+
+
+def create_post(request):
+    if request.method == 'GET':
+        categories = Category.objects.all()
+        return render(request, 'post_create_function.html',
+                      {'categories': categories})
+    title = request.POST.get('title')
+    content = request.POST.get('content')
+    category_id = request.POST.get('category_id')
+    category = Category.objects.get(id=category_id)
+    author_id = request.POST.get('author_id')
+    author = User.objects.get(id=author_id)
+    Post.objects.create(title=title, content=content, category=category,
+                        author=author)
+    return render(request, 'post_create_function.html')
