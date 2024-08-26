@@ -5,6 +5,8 @@
 {% block content %}
     <h1>Welcome to my blog</h1>
     {% if user.is_authenticated %}
+        Hello: {{ user.username }}<br>
+        Groups: {{ user.groups.all|join:", " }}
         <a href="{% url 'post_create_function' %}">Create Post</a>
     {% endif %}
     <ul>
