@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}
+Create Profile
+{% endblock %}
+{% block content %}
+	<h1>Create Profile</h1>
+    <form method="post" action="{% url 'create_profile' %}">
+        {% csrf_token %}
+        <p>Phone: <input type="text" name="phone" required></p>
+        <p>Address: <input type="text" name="address" required></p>
+        <p>Github: <input type="text" name="github" required></p>
+        <button>Create</button>
+    </form>
+{% endblock %}
