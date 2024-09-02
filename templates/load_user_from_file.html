@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}
+    Load User From File
+{% endblock %}
+{% block content %}
+    <form method="post" 
+        enctype="multipart/form-data" 
+          action="{% url 'load_user_from_file' %}">
+        {% csrf_token %}
+        <input type="file" name="file">
+        <button type="submit">Load</button>
+    </form>
+{% endblock %}

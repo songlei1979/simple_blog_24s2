@@ -1,7 +1,7 @@
 from django.urls import path
 
 from blog.views import HomeView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, create_post, \
-    likes_or_not, ProfileView, create_profile, register_user
+    likes_or_not, ProfileView, create_profile, register_user, load_user_from_file
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
@@ -22,4 +22,5 @@ urlpatterns = [
     path('user_profile/<int:pk>/',ProfileView.as_view(), name='profile'),
     path('create_profile', create_profile, name='create_profile'),
     path('register/', register_user, name='register'),
+    path('load_user_from_file/', load_user_from_file, name='load_user_from_file'),
 ]

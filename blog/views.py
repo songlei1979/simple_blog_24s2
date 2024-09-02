@@ -1,3 +1,4 @@
+import pandas as pd
 from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
@@ -121,3 +122,36 @@ def register_user(request):
     else:
         return render(request, 'register.html',
                       {'error': 'Something went wrong'})
+
+
+def load_user_from_file(request):
+    if request.method == 'GET':
+        return render(request, 'load_user_from_file.html')
+    file = request.FILES.get('users_file')
+    if file:
+        excel_file = pd.read_excel(file)
+        data = pd.DataFrame(excel_file)
+        usernames = data['Username'].values.tolist()
+        first_names = data['First Name'].values.tolist()
+        last_names = data['Last Name'].values.tolist()
+        emails = data['Email'].values.tolist()
+        dobs = data['DoB'].values.tolist()
+        phones = data['Phone'].values.tolist()
+        addresses = data['Address'].values.tolist()
+        githubs = data['Github'].values.tolist()
+        for i in range(len(usernames)):
+            print("user", i)
+            username = usernames[i]
+            first_name = first_names[i]
+            last_name = last_names[i]
+            email = emails[i]
+            dob = dobs[i]
+            print(dob)
+            phone = phones[i]
+            address = addresses[i]
+            github = githubs[i]
+            print(username)
+            print(first_name)
+            print(dob)
+        return render(request, 'home.html')
+
