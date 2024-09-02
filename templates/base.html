@@ -31,6 +31,9 @@
                             {% csrf_token %}
                             <button type="submit">logout</button>
                         </form>
+                        {% if user.profile %}
+                            <a class="nav-link" href="{% url 'profile' user.id %}">Profile</a>
+                        {% endif %}
                     {% else %}
                         <a class="nav-link" href="{% url 'login' %}">Login</a>
                     {% endif %}

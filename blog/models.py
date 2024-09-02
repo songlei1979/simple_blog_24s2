@@ -15,9 +15,18 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+    likes = models.ManyToManyField(User, related_name='likes', blank=True)
 
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):
         return f'/post_detail/{self.id}/'
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    github = models.URLField(max_length=200)
+    phone = models.CharField(max_length=20)
+    address = models.CharField(max_length=200)
+    def __str__(self):
+        return f'{self.user.username} Profile'

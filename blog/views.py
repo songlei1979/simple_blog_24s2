@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from blog.forms import CreateForm
@@ -56,3 +56,20 @@ def create_post(request):
     Post.objects.create(title=title, content=content, category=category,
                         author=author)
     return render(request, 'post_create_function.html')
+
+
+def likes_or_not(request):
+    if request.method == 'POST':
+        post_id = request.POST.get('post_id')
+        post = Post.objects.get(id=post_id)
+        if request.user in post.likes.all():
+            post.likes.remove(request.user)
+        else:
+            post.likes.add(request.user)
+        return render(request,
+                      'post_detail.html',
+                      {'object': post})
+
+class ProfileView(DetailView):
+    model = User
+    template_name = 'profile.html'

@@ -8,6 +8,24 @@
     <p>{{ object.category }}</p>
     <p>{{ object.created_at }}</p>
     <p>{{ object.updated_at }}</p>
+    
+    {% if user.is_authenticated %}
+        {% if user != object.author %}
+            <form method="post" action="{% url 'likes_or_not'%}">
+            {% csrf_token %}
+                <input name="post_id" type="hidden" value="{{ object.id }}" >
+                {% if user in object.likes.all %}
+                    <button type="submit" class="btn btn-danger">
+                        Unlike
+                    </button>
+                {% else %}
+                    <button type="submit" class="btn btn-primary">
+                        Like
+                    </button>
+                {% endif %}
+            </form>
+        {% endif %}
+    {% endif %}
     <a href="{% url 'home' %}">
         Back to Home
     </a>
