@@ -70,9 +70,11 @@ def likes_or_not(request):
                       'post_detail.html',
                       {'object': post})
 
+
 class ProfileView(DetailView):
     model = User
     template_name = 'profile.html'
+
 
 def create_profile(request):
     if request.method == 'GET':
@@ -85,3 +87,37 @@ def create_profile(request):
                            address=address, github=github)
     return render(request, 'profile.html',
                   {'object': user})
+
+
+def register_user(request):
+    if request.method == 'GET':
+        return render(request, 'register.html')
+    username = request.POST.get('username')
+    if username in User.objects.values_list('username', flat=True):
+        return render(request, 'register.html',
+                      {'error': 'Username already exists'})
+    email = request.POST.get('email')
+    password1 = request.POST.get('password1')
+    password2 = request.POST.get('password2')
+    first_name = request.POST.get('first_name')
+    last_name = request.POST.get('last_name')
+    if password1 != password2:
+        return render(request, 'register.html',
+                      {'error': 'Passwords do not match'})
+    if User.objects.create_user(username=username, email=email,
+                                first_name=first_name,
+                                last_name=last_name):
+        user = User.objects.get(username=username)
+        user.set_password(password1)
+        user.save()
+        phone = request.POST.get('phone')
+        address = request.POST.get('address')
+        github = request.POST.get('github')
+        Profile.objects.create(user=user,
+                               phone=phone,
+                               address=address,
+                               github=github)
+        return render(request, 'registration/login.html')
+    else:
+        return render(request, 'register.html',
+                      {'error': 'Something went wrong'})

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Register
+{% endblock %}
+
+{% block content %}
+    <h1>Register <a href="{% url 'login' %}">Login</a></h1>
+    <form method="post" action="{% url 'register' %}">
+        {% csrf_token %}
+        <p>Username: <input type="text" name="username" required></p>
+        <p>Email: <input type="email" name="email" required></p>
+        <p>Password: <input type="password" name="password1" required></p>
+        <p>Confirm Password: <input type="password" name="password2" required></p>
+        <p>First name: <input type="text" name="first_name" required> </p>
+        <p>Last name: <input type="text" name="last_name" required> </p>
+        <p>Phone: <input type="text" name="phone" required></p>
+        <p>Address: <input type="text" name="address" required></p>
+        <p>Github: <input type="text" name="github" required></p>
+        <button type="submit" class="btn btn-primary">
+            Register
+        </button>
+        {{ error }}
+    </form>
+	
+{% endblock %}
