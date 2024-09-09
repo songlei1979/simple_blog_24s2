@@ -2,6 +2,7 @@
 {% block title %}
     Create Post
 {% endblock %}
+<link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.1.0/ckeditor5.css" />
 
 {% block content %}
     {% if user.is_authenticated %}
@@ -9,7 +10,7 @@
         <form method="post">
             {% csrf_token %}
             <p>Title: <input name="title" type="text" class="form-control"/> </p>
-            <p>Content: <textarea name="content" class="form-control"></textarea></p>
+            <p>Content: <textarea name="content" id="content" class="form-control"></textarea></p>
             <p>Category: <select name="category_id"  class="form-control">
                 {% for category in categories %}
                     <option value="{{ category.id }}">{{ category.name }}</option>
@@ -20,9 +21,49 @@
             <button type="submit" class="btn btn-primary">
                 Create
             </button>
+        
+        <div id="editor">
+            <p>Hello from CKEditor 5!</p>
+        </div>
+
+        <script type="importmap">
+            {
+                "imports": {
+                    "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/43.1.0/ckeditor5.js",
+                    "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/43.1.0/"
+                }
+            }
+        </script>
+
+        <script type="module">
+            import {
+                ClassicEditor,
+                Essentials,
+                Bold,
+                Italic,
+                Font,
+                Paragraph
+            } from 'ckeditor5';
+
+            ClassicEditor
+                .create( document.querySelector( '#editor' ), {
+                    plugins: [ Essentials, Bold, Italic, Font, Paragraph ],
+                    toolbar: {
+                        items: [
+                            'undo', 'redo', '|', 'bold', 'italic', '|',
+                            'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor'
+                        ]
+                    }
+                } )
+                .then( /* ... */ )
+                .catch( /* ... */ );
+        </script>
         </form>
 
     {% else %}
         Login to create post
     {% endif %}
 {% endblock %}
+<script>
+    CKEDITOR.replace('content');
+</script>

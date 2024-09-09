@@ -4,7 +4,10 @@
 {% endblock %}
 {% block content %}
 	<h1>{{ object.title }}</h1>
-    <p>{{ object.content }}</p>
+    {% if object.image %}
+        <p><img src="{{ object.image.url }}" alt="image" width="300px"></p>
+    {% endif %}
+    <p>{{ object.content | safe }} </p>
     <p>{{ object.category }}</p>
     <p>{{ object.created_at }}</p>
     <p>{{ object.updated_at }}</p>
