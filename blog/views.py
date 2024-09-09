@@ -128,7 +128,6 @@ def load_user_from_file(request):
     if request.method == 'GET':
         return render(request, 'load_user_from_file.html')
     file = request.FILES.get('users_file')
-    print(file)
     if file:
         excel_file = pd.read_excel(file)
         data = pd.DataFrame(excel_file)
@@ -147,12 +146,19 @@ def load_user_from_file(request):
             last_name = last_names[i]
             email = emails[i]
             dob = dobs[i]
-            print(dob)
             phone = phones[i]
             address = addresses[i]
             github = githubs[i]
-            print(username)
-            print(first_name)
-            print(dob)
+            password1 = str(pd.to_datetime(dob, utc=True).date()).replace("-", "")
+            if User.objects.create_user(username=username, email=email,
+                                        first_name=first_name,
+                                        last_name=last_name):
+                user = User.objects.get(username=username)
+                user.set_password(password1)
+                user.save()
+                Profile.objects.create(user=user,
+                                       phone=phone,
+                                       address=address,
+                                       github=github)
         return render(request, 'home.html')
 
