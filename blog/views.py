@@ -6,6 +6,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 
 from blog.forms import CreateForm
 from blog.models import Post, Category, Profile
+from blog.utils import create_user_profile
 
 
 # Create your views here.
@@ -105,23 +106,13 @@ def register_user(request):
     if password1 != password2:
         return render(request, 'register.html',
                       {'error': 'Passwords do not match'})
-    if User.objects.create_user(username=username, email=email,
-                                first_name=first_name,
-                                last_name=last_name):
-        user = User.objects.get(username=username)
-        user.set_password(password1)
-        user.save()
-        phone = request.POST.get('phone')
-        address = request.POST.get('address')
-        github = request.POST.get('github')
-        Profile.objects.create(user=user,
-                               phone=phone,
-                               address=address,
-                               github=github)
-        return render(request, 'registration/login.html')
-    else:
-        return render(request, 'register.html',
-                      {'error': 'Something went wrong'})
+    phone = request.POST.get('phone')
+    address = request.POST.get('address')
+    github = request.POST.get('github')
+    create_user_profile(username, password1, first_name,
+                        last_name, email, phone,
+                        address, github, 3)
+    return render(request, 'home.html')
 
 
 def load_user_from_file(request):
@@ -150,15 +141,8 @@ def load_user_from_file(request):
             address = addresses[i]
             github = githubs[i]
             password1 = str(pd.to_datetime(dob, utc=True).date()).replace("-", "")
-            if User.objects.create_user(username=username, email=email,
-                                        first_name=first_name,
-                                        last_name=last_name):
-                user = User.objects.get(username=username)
-                user.set_password(password1)
-                user.save()
-                Profile.objects.create(user=user,
-                                       phone=phone,
-                                       address=address,
-                                       github=github)
+            create_user_profile(username, password1, first_name,
+                                last_name, email, phone, address,
+                                github, 1)
         return render(request, 'home.html')
 
