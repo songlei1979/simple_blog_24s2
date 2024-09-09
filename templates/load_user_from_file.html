@@ -7,7 +7,7 @@
         enctype="multipart/form-data" 
           action="{% url 'load_user_from_file' %}">
         {% csrf_token %}
-        <input type="file" name="file">
+        <input type="file" name="users_file">
         <button type="submit">Load</button>
     </form>
 {% endblock %}

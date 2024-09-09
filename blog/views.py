@@ -128,6 +128,7 @@ def load_user_from_file(request):
     if request.method == 'GET':
         return render(request, 'load_user_from_file.html')
     file = request.FILES.get('users_file')
+    print(file)
     if file:
         excel_file = pd.read_excel(file)
         data = pd.DataFrame(excel_file)
